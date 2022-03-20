@@ -5,7 +5,7 @@ library("car")
 setTimeLimit(cpu = Inf, elapsed = Inf, transient = FALSE)
 setSessionTimeLimit(cpu = Inf, elapsed = Inf)
 
-setwd("/Users/abrarnasir/Desktop/School/STA302/Video Project/STA302_VideoProject")
+setwd("/Users/abrarnasir/Desktop/School/STA302/STA302_VideoProject")
 df <- read.csv("VPdataset.csv")
 
 # df %>% drop_na()
@@ -110,7 +110,7 @@ res13 <- ggplot(t_df, aes(UG25ABV, residuals(model2))) + geom_point() + ggtitle(
 summary(full)
 summary (model1)
 
-model3 <- lm(ADM_RATE ~ STATEID + CONTROL + NUMBRANCH + AVGFACSAL + FEMALE + PAR_ED_PCT_1STGEN + UG25ABV + INC_PCT_LO, data = t_df)
+model3 <- lm(ADM_RATE ~ STATEID + CONTROL + NUMBRANCH + AVGFACSAL + PAR_ED_PCT_1STGEN + UG25ABV + INC_PCT_LO, data = t_df)
 summary(model3)
 
 qqnorm(residuals(model3))
