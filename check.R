@@ -110,6 +110,10 @@ res13 <- ggplot(t_df, aes(UG25ABV, residuals(model2))) + geom_point() + ggtitle(
 summary(full)
 summary (model1)
 
+pairs(t_df[,-c(1, 5, 6, 8, 9, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23)])
+
+pairs(df[, -c(1, 2, 3)])
+
 model3 <- lm(ADM_RATE ~ STATEID + CONTROL + NUMBRANCH + AVGFACSAL + PAR_ED_PCT_1STGEN + UG25ABV + INC_PCT_LO, data = t_df)
 summary(model3)
 
