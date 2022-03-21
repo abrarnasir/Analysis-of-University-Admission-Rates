@@ -125,32 +125,56 @@ transformed_df <- data.frame(
   df$UNEMP_RATE ** -0.80
 )
 
-names(transformed_df)[1] <- "Admission Rate"
-names(transformed_df)[2] <- "State Identifier"
-names(transformed_df)[3] <- "Number of Branches"
-names(transformed_df)[4] <- "Control Identifier"
-names(transformed_df)[5] <- "Region Identifier"
-names(transformed_df)[6] <- "Historically Black-Serving Institute Identifier"
-names(transformed_df)[7] <- "Predominantly Black-Serving Institute Identifier"
-names(transformed_df)[8] <- "Tribal-Serving Institute Identifier"
-names(transformed_df)[9] <- "Hispanic-Serving Institute Identifier"
-names(transformed_df)[10] <- "Women-Only Institute Identifier"
-names(transformed_df)[11] <- "Cost of Attendance"
-names(transformed_df)[12] <- "Average Faculty Salary"
-names(transformed_df)[13] <- "Proportion of FT Faculty"
-names(transformed_df)[14] <- "% of UGs Receiving Pell Grant"
-names(transformed_df)[15] <- "% of UGs Aged 25 and Above"
-names(transformed_df)[16] <- "% of Aided Students whose Family Income is between $0-$30,000"
-names(transformed_df)[17] <- "% of First-Generation Students"
-names(transformed_df)[18] <- "Proportion of Female Student Body"
-names(transformed_df)[19] <- "Median Family Income of Students"
-names(transformed_df)[20] <- "% of White Population in Students' Neighbourhood"
-names(transformed_df)[21] <- "% of Black Population in Students' Neighbourhood"
-names(transformed_df)[22] <- "% of Asian Population in Students' Neighbourhood"
-names(transformed_df)[23] <- "% of Hispanic Population in Students' Neighbourhood"
-names(transformed_df)[24] <- "% of Population Aged 25+ with a Bachelor's Degree in Students' Neighbourhood"
-names(transformed_df)[25] <- "% of Population Aged 25+ with a Professional Degree in Students' Neighbourhood"
-names(transformed_df)[26] <- "% of U.S. Born Population in Students' Neighbourhood"
-names(transformed_df)[27] <- "Poverty Rate in Students' Neighbourhood"
-names(transformed_df)[28] <- "Unemployment Rate in Students' Neighbourhood"
+for(i in 1:28){
+  names(transformed_df)[i] <- names(df)[i]
+}
 
+#names(transformed_df)[1] <- "Admission Rate"
+#names(transformed_df)[2] <- "State Identifier"
+#names(transformed_df)[3] <- "Number of Branches"
+#names(transformed_df)[4] <- "Control Identifier"
+#names(transformed_df)[5] <- "Region Identifier"
+#names(transformed_df)[6] <- "Historically Black-Serving Institute Identifier"
+#names(transformed_df)[7] <- "Predominantly Black-Serving Institute Identifier"
+#names(transformed_df)[8] <- "Tribal-Serving Institute Identifier"
+#names(transformed_df)[9] <- "Hispanic-Serving Institute Identifier"
+#names(transformed_df)[10] <- "Women-Only Institute Identifier"
+#names(transformed_df)[11] <- "Cost of Attendance"
+#names(transformed_df)[12] <- "Average Faculty Salary"
+#names(transformed_df)[13] <- "Proportion of FT Faculty"
+#names(transformed_df)[14] <- "% of UGs Receiving Pell Grant"
+#names(transformed_df)[15] <- "% of UGs Aged 25 and Above"
+#names(transformed_df)[16] <- "% of Aided Students whose Family Income is between $0-$30,000"
+#names(transformed_df)[17] <- "% of First-Generation Students"
+#names(transformed_df)[18] <- "Proportion of Female Student Body"
+#names(transformed_df)[19] <- "Median Family Income of Students"
+#names(transformed_df)[20] <- "% of White Population in Students' Neighborhood"
+#names(transformed_df)[21] <- "% of Black Population in Students' Neighborhood"
+#names(transformed_df)[22] <- "% of Asian Population in Students' Neighborhood"
+#names(transformed_df)[23] <- "% of Hispanic Population in Students' Neighborhood"
+#names(transformed_df)[24] <- "% of Population Aged 25+ with a Bachelor's Degree in Students' Neighborhood"
+#names(transformed_df)[25] <- "% of Population Aged 25+ with a Professional Degree in Students' Neighborhood"
+#names(transformed_df)[26] <- "% of U.S. Born Population in Students' Neighborhood"
+#names(transformed_df)[27] <- "Poverty Rate in Students' Neighborhood"
+#names(transformed_df)[28] <- "Unemployment Rate in Students' Neighborhood"
+
+model <- lm(ADM_RATE ~ STATEID + CONTROL + NUMBRANCH + AVGFACSAL + PAR_ED_PCT_1STGEN + UG25ABV + INC_PCT_LO, data = transformed_df)
+summary(model)
+
+pairs(transformed_df[, c(2, 3, 4, 12, 15, 16, 17)])
+
+ggplot(transformed_df, aes(fitted(model), ADM_RATE)) + geom_point() + ggtitle("Response versus Fitted") + geom_smooth(method = 'lm', se = FALSE)
+
+resty <- ggplot(transformed_df, aes(fitted(model), residuals(model))) + geom_point() + ggtitle("Residuals versus Fitted") + geom_smooth(method = 'lm', se = FALSE)
+rest1 <- ggplot(transformed_df, aes(STATEID, residuals(model))) + geom_point() + ggtitle("Residuals vs. STATEID") + geom_smooth(method = 'lm', se = FALSE)
+rest2 <- ggplot(transformed_df, aes(CONTROL, residuals(model))) + geom_point() + ggtitle("Residuals vs. CONTROL") + geom_smooth(method = 'lm', se = FALSE)
+rest3 <- ggplot(transformed_df, aes(NUMBRANCH, residuals(model))) + geom_point() + ggtitle("Residuals vs. NUMBRANCH") + geom_smooth(method = 'lm', se = FALSE)
+rest4 <- ggplot(transformed_df, aes(AVGFACSAL, residuals(model))) + geom_point() + ggtitle("Residuals vs. AVGFACSAL") + geom_smooth(method = 'lm', se = FALSE)
+rest5 <- ggplot(transformed_df, aes(PAR_ED_PCT_1STGEN, residuals(model))) + geom_point() + ggtitle("Residuals vs. PAR_ED_PCT_1STGEN") + geom_smooth(method = 'lm', se = FALSE)
+rest6 <- ggplot(transformed_df, aes(UG25ABV, residuals(model))) + geom_point() + ggtitle("Residuals vs. UG25ABV") + geom_smooth(method = 'lm', se = FALSE)
+rest7 <- ggplot(transformed_df, aes(INC_PCT_LO, residuals(model))) + geom_point() + ggtitle("Residuals vs. INC_PCT_LO") + geom_smooth(method = 'lm', se = FALSE)
+(resty + rest1 + rest2 + rest3) /
+  (rest4 + rest5 + rest6 + rest7)
+
+qqnorm(residuals(model))
+qqline(residuals(model))
