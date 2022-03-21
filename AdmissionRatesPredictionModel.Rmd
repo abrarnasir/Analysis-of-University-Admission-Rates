@@ -1,0 +1,70 @@
+---
+title: "Admission Rates of Colleges and Universities - Prediction Models"
+author: "Md Abrar Nasir, Sumaita Imam Anika"
+date: "March 20, 2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library("tidyverse")
+library("patchwork")
+library("car")
+```
+
+```{r}
+df <- read.csv("VPdataset.csv")
+```
+
+```{r}
+df <- transform(df, STATEID = as.numeric(factor(STABBR)))
+df <- df[, !(names(df) %in% c("UNITID", "INSTNM", "STABBR"))]
+df <- df %>% relocate(STATEID)
+df <- df %>% relocate(ADM_RATE)
+```
+
+```{r}
+hist1 <- ggplot(df, aes(x = ADM_RATE)) + geom_histogram() + ggtitle("Admission Rate")
+hist2 <- ggplot(df, aes(x = STATEID)) + geom_histogram() + ggtitle("States")
+hist3 <- ggplot(df, aes(x = REGION)) + geom_histogram() + ggtitle("Regions")
+hist4 <- ggplot(df, aes(x = NUMBRANCH)) + geom_histogram() + ggtitle("Number of Branches") 
+hist5 <- ggplot(df, aes(x = CONTROL)) + geom_histogram() + ggtitle("Control") 
+hist6 <- ggplot(df, aes(x = HBCU)) + geom_histogram() + ggtitle("Historically Black")
+hist7 <- ggplot(df, aes(x = PBI)) + geom_histogram() + ggtitle("Predominantly Black")
+hist8 <- ggplot(df, aes(x = TRIBAL)) + geom_histogram() + ggtitle("Tribal")
+hist9 <- ggplot(df, aes(x = HSI)) + geom_histogram() + ggtitle("Hispanic Serving")
+hist10 <- ggplot(df, aes(x = WOMENONLY)) + geom_histogram() + ggtitle("Women Only")
+hist11 <- ggplot(df, aes(x = COSTT4_A)) + geom_histogram() + ggtitle("Average Cost of Attendance")
+hist12 <- ggplot(df, aes(x = AVGFACSAL)) + geom_histogram() + ggtitle("Average Faculty Salary")
+hist13 <- ggplot(df, aes(x = PFTFAC)) + geom_histogram() + ggtitle("Proportion of Full-Time Faculty Members")
+hist14 <- ggplot(df, aes(x = PCTPELL)) + geom_histogram() + ggtitle("Percentage of Undergraduates \n Receiving Pell Grant")
+hist15 <- ggplot(df, aes(x = UG25ABV)) + geom_histogram() + ggtitle("Percentage of Undergraduates \n Aged 25+")
+hist16 <- ggplot(df, aes(x = INC_PCT_LO)) + geom_histogram() + ggtitle("Percentage of Aided Students whose \n Family Income is between $0-$30,000")
+hist17 <- ggplot(df, aes(x = PAR_ED_PCT_1STGEN)) + geom_histogram() + ggtitle("Percentage of \n First-Generation Students")
+hist18 <- ggplot(df, aes(x = FEMALE)) + geom_histogram() + ggtitle("Proportion of Student Body \n that is Female")
+hist19 <- ggplot(df, aes(x = PCT_WHITE)) + geom_histogram() + ggtitle("Percentage of the Population from \n Students' Zipcodes that is White")
+hist20 <- ggplot(df, aes(x = PCT_BLACK)) + geom_histogram() + ggtitle("Percentage of the Population from \n Students' Zipcodes that is Black")
+hist21 <- ggplot(df, aes(x = PCT_ASIAN)) + geom_histogram() + ggtitle("Percentage of the Population from \n Students' Zipcodes that is Asian")
+hist22 <- ggplot(df, aes(x = PCT_HISPANIC)) + geom_histogram() + ggtitle("Percentage of the Population from \n Students' Zipcodes that is Hispanic")
+hist23 <- ggplot(df, aes(x = PCT_BA)) + geom_histogram() + ggtitle("Percentage of the Population from \n Students' Zipcodes with a \n Bachelor's Degree over the Age 25")
+hist24 <- ggplot(df, aes(x = PCT_GRAD_PROF)) + geom_histogram() + ggtitle("Percentage of the Population from \n Students' Zipcodes with a \n Professional Degree over the Age 25")
+hist25 <- ggplot(df, aes(x = PCT_BORN_US)) + geom_histogram() + ggtitle("Percentage of the Population from \n Students' Zipcodes that was Born in the US")
+hist26 <- ggplot(df, aes(x = POVERTY_RATE)) + geom_histogram() + ggtitle("Poverty Rate")
+hist27 <- ggplot(df, aes(x = UNEMP_RATE)) + geom_histogram() + ggtitle("Unemployment Rate")
+hist28 <- ggplot(df, aes(x = MD_FAMINC)) + geom_histogram() + ggtitle("Median Family Income of Students")
+
+hist1 + hist2 + hist3 + hist4 + hist5 + hist6 + hist7 + hist8 + hist9 + hist10 + hist11 + hist12 + hist13 + hist14 + hist15 + hist16 + hist17 + hist18 + hist19 + hist20 + hist21 + hist22 + hist23 + hist24 + hist25 + hist26 + hist27 + hist28 + plot_layout(nrow = 7, byrow = FALSE) + plot_annotation(title = 'Histograms of Variables')
+```
+
+```{r}
+full <- lm(ADM_RATE ~., data = df)
+summary(full)
+```
+
+```{r}
+pairs(df[, -c(1)])
+```
+
