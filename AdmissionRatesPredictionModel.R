@@ -178,3 +178,5 @@ rest7 <- ggplot(transformed_df, aes(INC_PCT_LO, residuals(model))) + geom_point(
 
 qqnorm(residuals(model))
 qqline(residuals(model))
+
+anova(model, full)
