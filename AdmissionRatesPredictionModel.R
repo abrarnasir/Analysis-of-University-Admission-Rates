@@ -160,6 +160,8 @@ for(i in 1:28){
 #names(transformed_df)[27] <- "Poverty Rate in Students' Neighborhood"
 #names(transformed_df)[28] <- "Unemployment Rate in Students' Neighborhood"
 
+summary(lm(ADM_RATE ~., data = transformed_df))
+
 model <- lm(ADM_RATE ~ STATEID + CONTROL + NUMBRANCH + AVGFACSAL + PAR_ED_PCT_1STGEN + UG25ABV + INC_PCT_LO, data = transformed_df)
 summary(model)
 
