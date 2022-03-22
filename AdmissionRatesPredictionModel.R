@@ -99,7 +99,7 @@ summary(p)
 transformed_df <- data.frame(
   df$ADM_RATE ** lambda,
   df$STATEID ** 1,
-  df$NUMBRANCH ** 1,
+  df$NUMBRANCH ** -5.72,
   df$CONTROL ** 1,
   df$REGION ** 1,
   df$HBCU ** 1,
@@ -160,12 +160,12 @@ for(i in 1:28){
 #names(transformed_df)[27] <- "Poverty Rate in Students' Neighborhood"
 #names(transformed_df)[28] <- "Unemployment Rate in Students' Neighborhood"
 
-summary(lm(ADM_RATE ~., data = transformed_df))
+transformed_full <- lm(ADM_RATE ~., data = transformed_df)
 
-model <- lm(ADM_RATE ~ STATEID + CONTROL + NUMBRANCH + AVGFACSAL + PAR_ED_PCT_1STGEN + UG25ABV + INC_PCT_LO, data = transformed_df)
+model <- lm(ADM_RATE ~ STATEID + CONTROL + NUMBRANCH + AVGFACSAL + PAR_ED_PCT_1STGEN + UG25ABV + INC_PCT_LO + HSI + PCT_HISPANIC, data = transformed_df)
 summary(model)
 
-pairs(transformed_df[, c(2, 3, 4, 12, 15, 16, 17)])
+pairs(transformed_df[, c(2, 3, 4, 9, 12, 15, 16, 17, 23)])
 
 ggplot(transformed_df, aes(fitted(model), ADM_RATE)) + geom_point() + ggtitle("Transformed Response versus Transformed Fitted") + geom_smooth(method = 'lm', se = FALSE)
 
@@ -177,9 +177,11 @@ rest4 <- ggplot(transformed_df, aes(AVGFACSAL, residuals(model))) + geom_point()
 rest5 <- ggplot(transformed_df, aes(PAR_ED_PCT_1STGEN, residuals(model))) + geom_point() + ggtitle("Residuals vs. Transformed PAR_ED_PCT_1STGEN") + geom_smooth(method = 'lm', se = FALSE)
 rest6 <- ggplot(transformed_df, aes(UG25ABV, residuals(model))) + geom_point() + ggtitle("Residuals vs. Transformed UG25ABV") + geom_smooth(method = 'lm', se = FALSE)
 rest7 <- ggplot(transformed_df, aes(INC_PCT_LO, residuals(model))) + geom_point() + ggtitle("Residuals vs. Transformed INC_PCT_LO") + geom_smooth(method = 'lm', se = FALSE)
-resty + rest1 + rest2 + rest3 + rest4 + rest5 + rest6 + rest7
+rest8 <- ggplot(transformed_df, aes(HSI, residuals(model))) + geom_point() + ggtitle("Residuals vs. Transformed HSI") + geom_smooth(method = 'lm', se = FALSE)
+rest9 <- ggplot(transformed_df, aes(PCT_HISPANIC, residuals(model))) + geom_point() + ggtitle("Residuals vs. Transformed PCT_HISPANIC") + geom_smooth(method = 'lm', se = FALSE)
+resty + rest1 + rest2 + rest3 + rest4 + rest5 + rest6 + rest7 + rest8 + rest9
 
 qqnorm(residuals(model))
 qqline(residuals(model))
 
-anova(model, full)
+anova(model, transformed_full)
