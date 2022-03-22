@@ -47,7 +47,7 @@ summary(full)
 
 pairs(df[, -c(1)])
 
-ggplot(df, aes(fitted(full), ADM_RATE)) + geom_point() + ggtitle("Response versus Fitted")
+ggplot(df, aes(fitted(full), ADM_RATE)) + geom_point() + ggtitle("Response versus Fitted")  + geom_point() + ggtitle("Residuals versus Fitted") + geom_smooth(method = 'lm', se = FALSE)
 
 resy <- ggplot(df, aes(fitted(full), residuals(full))) + geom_point() + ggtitle("Residuals versus Fitted") + geom_smooth(method = 'lm', se = FALSE)
 res1 <- ggplot(df, aes(STATEID, residuals(full))) + geom_point() + ggtitle(paste0("Residuals vs. ", names(df)[2])) + geom_smooth(method = 'lm', se = FALSE)
@@ -77,13 +77,15 @@ res24 <- ggplot(df, aes(PCT_GRAD_PROF, residuals(full))) + geom_point() + ggtitl
 res25 <- ggplot(df, aes(PCT_BORN_US, residuals(full))) + geom_point() + ggtitle(paste0("Residuals vs. ", names(df)[26])) + geom_smooth(method = 'lm', se = FALSE)
 res26 <- ggplot(df, aes(POVERTY_RATE, residuals(full))) + geom_point() + ggtitle(paste0("Residuals vs. ", names(df)[27])) + geom_smooth(method = 'lm', se = FALSE)
 res27 <- ggplot(df, aes(UNEMP_RATE, residuals(full))) + geom_point() + ggtitle(paste0("Residuals vs. ", names(df)[28])) + geom_smooth(method = 'lm', se = FALSE)
-(resy + res1 + res2 + res3) /
-  (res4 + res5 + res6 + res7) /
-  (res8 + res9 + res10 + res11) /
-  (res12 + res13 + res14 + res15) /
-  (res16 + res17 + res18 + res19) /
-  (res20 + res21 + res22 + res23) /
-  (res24 + res25 + res26 + res27)
+resy + res1 + res2 + res3 + res4 + res5 + res6 + res7 + res8 + res9 + res10 + res11 + res12 + res13 + res14 + res15 + res16 + res17 + res18 + res19 + res20 + res21 + res22 + res23 + res24 + res25 + res26 + res27
+
+#(resy + res1 + res2 + res3) /
+#  (res4 + res5 + res6 + res7) /
+#  (res8 + res9 + res10 + res11) /
+#  (res12 + res13 + res14 + res15) /
+#  (res16 + res17 + res18 + res19) /
+#  (res20 + res21 + res22 + res23) /
+#  (res24 + res25 + res26 + res27)
 
 qqnorm(residuals(full))
 qqline(residuals(full))
@@ -96,15 +98,15 @@ summary(p)
 
 transformed_df <- data.frame(
   df$ADM_RATE ** lambda,
-  df$STATEID ** 0.83,
-  df$NUMBRANCH ** -5.72,
-  log(df$CONTROL),
-  df$REGION ** 0.5,
-  df$HBCU ** -1.51,
-  df$PBI ** -3.44,
-  df$TRIBAL ** -36.15,
-  df$HSI ** -0.46,
-  df$WOMENONLY ** -8.15,
+  df$STATEID ** 1,
+  df$NUMBRANCH ** 1,
+  df$CONTROL ** 1,
+  df$REGION ** 1,
+  df$HBCU ** 1,
+  df$PBI ** 1,
+  df$TRIBAL ** 1,
+  df$HSI ** 1,
+  df$WOMENONLY ** 1,
   df$COSTT4_A ** 0.50,
   df$AVGFACSAL ** 0.33,
   df$PFTFAC ** 1,
@@ -163,18 +165,17 @@ summary(model)
 
 pairs(transformed_df[, c(2, 3, 4, 12, 15, 16, 17)])
 
-ggplot(transformed_df, aes(fitted(model), ADM_RATE)) + geom_point() + ggtitle("Response versus Fitted") + geom_smooth(method = 'lm', se = FALSE)
+ggplot(transformed_df, aes(fitted(model), ADM_RATE)) + geom_point() + ggtitle("Transformed Response versus Transformed Fitted") + geom_smooth(method = 'lm', se = FALSE)
 
-resty <- ggplot(transformed_df, aes(fitted(model), residuals(model))) + geom_point() + ggtitle("Residuals versus Fitted") + geom_smooth(method = 'lm', se = FALSE)
-rest1 <- ggplot(transformed_df, aes(STATEID, residuals(model))) + geom_point() + ggtitle("Residuals vs. STATEID") + geom_smooth(method = 'lm', se = FALSE)
-rest2 <- ggplot(transformed_df, aes(CONTROL, residuals(model))) + geom_point() + ggtitle("Residuals vs. CONTROL") + geom_smooth(method = 'lm', se = FALSE)
-rest3 <- ggplot(transformed_df, aes(NUMBRANCH, residuals(model))) + geom_point() + ggtitle("Residuals vs. NUMBRANCH") + geom_smooth(method = 'lm', se = FALSE)
-rest4 <- ggplot(transformed_df, aes(AVGFACSAL, residuals(model))) + geom_point() + ggtitle("Residuals vs. AVGFACSAL") + geom_smooth(method = 'lm', se = FALSE)
-rest5 <- ggplot(transformed_df, aes(PAR_ED_PCT_1STGEN, residuals(model))) + geom_point() + ggtitle("Residuals vs. PAR_ED_PCT_1STGEN") + geom_smooth(method = 'lm', se = FALSE)
-rest6 <- ggplot(transformed_df, aes(UG25ABV, residuals(model))) + geom_point() + ggtitle("Residuals vs. UG25ABV") + geom_smooth(method = 'lm', se = FALSE)
-rest7 <- ggplot(transformed_df, aes(INC_PCT_LO, residuals(model))) + geom_point() + ggtitle("Residuals vs. INC_PCT_LO") + geom_smooth(method = 'lm', se = FALSE)
-(resty + rest1 + rest2 + rest3) /
-  (rest4 + rest5 + rest6 + rest7)
+resty <- ggplot(transformed_df, aes(fitted(model), residuals(model))) + geom_point() + ggtitle("Residuals versus Transformed Fitted") + geom_smooth(method = 'lm', se = FALSE)
+rest1 <- ggplot(transformed_df, aes(STATEID, residuals(model))) + geom_point() + ggtitle("Residuals vs. Transformed STATEID") + geom_smooth(method = 'lm', se = FALSE)
+rest2 <- ggplot(transformed_df, aes(CONTROL, residuals(model))) + geom_point() + ggtitle("Residuals vs. Transformed CONTROL") + geom_smooth(method = 'lm', se = FALSE)
+rest3 <- ggplot(transformed_df, aes(NUMBRANCH, residuals(model))) + geom_point() + ggtitle("Residuals vs. Transformed NUMBRANCH") + geom_smooth(method = 'lm', se = FALSE)
+rest4 <- ggplot(transformed_df, aes(AVGFACSAL, residuals(model))) + geom_point() + ggtitle("Residuals vs. Transformed AVGFACSAL") + geom_smooth(method = 'lm', se = FALSE)
+rest5 <- ggplot(transformed_df, aes(PAR_ED_PCT_1STGEN, residuals(model))) + geom_point() + ggtitle("Residuals vs. Transformed PAR_ED_PCT_1STGEN") + geom_smooth(method = 'lm', se = FALSE)
+rest6 <- ggplot(transformed_df, aes(UG25ABV, residuals(model))) + geom_point() + ggtitle("Residuals vs. Transformed UG25ABV") + geom_smooth(method = 'lm', se = FALSE)
+rest7 <- ggplot(transformed_df, aes(INC_PCT_LO, residuals(model))) + geom_point() + ggtitle("Residuals vs. Transformed INC_PCT_LO") + geom_smooth(method = 'lm', se = FALSE)
+resty + rest1 + rest2 + rest3 + rest4 + rest5 + rest6 + rest7
 
 qqnorm(residuals(model))
 qqline(residuals(model))
